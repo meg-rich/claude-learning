@@ -3,6 +3,7 @@ import { FormattedMessage } from "react-intl";
 import { Navigate, Outlet, useMatch, useNavigate } from "react-router-dom";
 import { useSetAtom, useStore } from "jotai";
 import { Sidebar } from "../components/Sidebar";
+import { DailyQuizPanel } from "../components/DailyQuizPanel";
 import { useAuth } from "../queries/useAuth";
 import { useChatList } from "../queries/useChatList";
 import { useAuthMutations } from "../mutations/useAuthMutations";
@@ -113,6 +114,7 @@ export function Root() {
           <Outlet />
         </section>
       </main>
+      <DailyQuizPanel enabled={auth.data?.authenticated === true} />
     </div>
   );
 }
