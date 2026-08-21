@@ -1,0 +1,52 @@
+{
+  "name": "claude-background",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently -n web,api -c cyan,magenta \"vite\" \"npm:dev:api\"",
+    "dev:api": "tsx watch server/index.ts",
+    "build": "tsc -b && vite build",
+    "start": "NODE_ENV=production tsx server/index.ts",
+    "preview": "vite preview",
+    "lint": "oxlint",
+    "typecheck": "tsc -b",
+    "i18n:extract": "formatjs extract 'src/**/*.{ts,tsx}' --out-file src/i18n/messages/en.json --id-interpolation-pattern '[sha512:contenthash:base64:6]'",
+    "i18n:compile": "formatjs compile src/i18n/messages/en.json --out-file src/i18n/compiled/en.json"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.120.0",
+    "@tanstack/react-query": "^5.101.4",
+    "@types/better-sqlite3": "^9.6.0",
+    "better-sqlite3": "^13.0.3",
+    "cookie-parser": "^1.4.7",
+    "express": "^5.2.1",
+    "jotai": "^2.20.2",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-intl": "^10.1.22",
+    "react-markdown": "^10.1.0",
+    "react-router-dom": "^7.18.2",
+    "remark-gfm": "^4.0.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.29.7",
+    "@formatjs/cli": "^6.16.19",
+    "@types/cookie-parser": "^1.4.10",
+    "@types/express": "^5.0.6",
+    "@types/node": "^24.13.3",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.4",
+    "babel-plugin-formatjs": "^11.3.16",
+    "concurrently": "^10.0.5",
+    "oxlint": "^1.75.0",
+    "tsx": "^4.23.12",
+    "typescript": "~6.0.2",
+    "vite": "^8.2.0",
+    "vite-plugin-babel": "^1.7.3"
+  },
+  "allowScripts": {
+    "better-sqlite3@13.0.3": true
+  }
+}
