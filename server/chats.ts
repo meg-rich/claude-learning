@@ -2,6 +2,7 @@ import { randomUUID } from "node:crypto";
 import express from "express";
 import { requireUser, type User } from "./auth.ts";
 import { db } from "./db.ts";
+import { upsertOffersForChat, type OfferBlob } from "./dailyQuiz.ts";
 
 /** Row shape we hold in the DB. Turns/offers live as JSON blobs. */
 type ChatRow = {
@@ -107,6 +108,12 @@ chatsRouter.patch("/:id", (req, res) => {
   if (result.changes === 0) {
     res.status(404).json({ error: "No such chat." });
     return;
+  }
+  // If offers landed on this PATCH, feed them into the learned_topics index.
+  // INSERT OR IGNORE keeps this cheap — a chat PATCHed 20 times inserts each
+  // topic once.
+  if (Array.isArray(body.offers) && body.offers.length > 0) {
+    upsertOffersForChat(user.id, req.params.id!, body.offers as OfferBlob[]);
   }
   const row = getChat.get(req.params.id, user.id) as ChatRow;
   res.json({ chat: toRecord(row) });

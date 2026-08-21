@@ -14,6 +14,11 @@ import {
 } from "./auth.ts";
 import { chatsRouter } from "./chats.ts";
 import { db } from "./db.ts";
+import { makeDailyQuizRouter } from "./dailyQuizRouter.ts";
+import {
+  backfillLearnedTopics,
+  startDailyQuizScheduler,
+} from "./dailyQuizScheduler.ts";
 import {
   enrichCourseWithResources,
   generateCourse,
@@ -114,6 +119,10 @@ app.post("/api/auth/logout", (req, res) => {
 /* ---- chats CRUD ---- */
 
 app.use("/api/chats", chatsRouter);
+
+/* ---- daily retention quiz ---- */
+
+app.use("/api/daily-quiz", makeDailyQuizRouter(() => envKey));
 
 /* ---- course generation ---- */
 
@@ -400,4 +409,20 @@ app.listen(PORT, () => {
       ? "[claude-background] ANTHROPIC_API_KEY set — /api/chat ready."
       : "[claude-background] WARNING: no ANTHROPIC_API_KEY set; /api/chat will 503 until it is.",
   );
+
+  // Backfill any offers that predate the learned_topics table so the first
+  // day's cron has something to draw from. Cheap: INSERT OR IGNORE per row.
+  const backfilled = backfillLearnedTopics();
+  if (backfilled > 0) {
+    console.log(`[daily-quiz] backfilled ${backfilled} offers into learned_topics.`);
+  }
+
+  // Scheduler only runs when there's a server-side key to bill against.
+  // Users on per-session sign-in mode simply don't get the daily quiz.
+  if (envKey) {
+    startDailyQuizScheduler(envKey);
+    console.log("[daily-quiz] scheduler armed — next pass at 04:00 UTC.");
+  } else {
+    console.log("[daily-quiz] disabled — no ANTHROPIC_API_KEY.");
+  }
 });

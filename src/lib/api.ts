@@ -155,6 +155,45 @@ export async function deleteChat(id: string): Promise<void> {
   if (!res.ok) throw new Error(await readError(res, "Could not delete chat."));
 }
 
+/* Daily retention quiz — pregenerated in the server, one per user per UTC day. */
+
+export type DailyQuiz = {
+  date: string;
+  questions: QuizQuestion[];
+  answers: number[] | null;
+  score: number | null;
+  completedAt: number | null;
+  dismissedAt: number | null;
+};
+
+export async function fetchDailyQuiz(): Promise<DailyQuiz | null> {
+  const res = await fetch("/api/daily-quiz");
+  if (!res.ok) throw new Error(await readError(res, "Could not load today's quiz."));
+  return ((await res.json()) as { quiz: DailyQuiz | null }).quiz;
+}
+
+export async function submitDailyQuizAnswers(answers: number[]): Promise<DailyQuiz> {
+  const res = await fetch("/api/daily-quiz/answers", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ answers }),
+  });
+  if (!res.ok) throw new Error(await readError(res, "Could not record answers."));
+  return ((await res.json()) as { quiz: DailyQuiz }).quiz;
+}
+
+export async function regenerateDailyQuiz(): Promise<DailyQuiz> {
+  const res = await fetch("/api/daily-quiz/regenerate", { method: "POST" });
+  if (!res.ok) throw new Error(await readError(res, "Could not regenerate quiz."));
+  return ((await res.json()) as { quiz: DailyQuiz }).quiz;
+}
+
+export async function dismissDailyQuiz(): Promise<DailyQuiz> {
+  const res = await fetch("/api/daily-quiz/dismiss", { method: "POST" });
+  if (!res.ok) throw new Error(await readError(res, "Could not dismiss quiz."));
+  return ((await res.json()) as { quiz: DailyQuiz }).quiz;
+}
+
 /* Course generation — a two-step flow: intake questions, then the course itself. */
 
 export type IntakeQuestion = { prompt: string; kind: "choice" | "text"; options: string[] };
