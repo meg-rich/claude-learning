@@ -115,7 +115,10 @@ const OFFER_BACKGROUND: Anthropic.Tool = {
     "     you can answer the specific question inline, they lack the framework to evaluate the " +
     "     next one — the primer is for the domain, not the question. This overrides the inline- " +
     "     correction exclusion below: a tidy checklist in your reply is not a reason to skip the " +
-    "     panel here.\n\n" +
+    "     panel here. When this path fires, set topic to the DOMAIN the user flagged as new to " +
+    '     ("car maintenance", "personal finance", "home buying"), not the narrow subject of the ' +
+    '     immediate question ("tire replacement", "index funds", "closing costs") — the primer ' +
+    "     is for the ground they're missing, not this one question.\n\n" +
     "  E. VERDICT WITHOUT FRAMEWORK — the user is asking you to render a judgment " +
     '     ("do I need this?", "is this normal?", "is this a good deal?", "is this fair?", ' +
     '     "should I be worried?") in a domain where they have shown they cannot currently ' +
