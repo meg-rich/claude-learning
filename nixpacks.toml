@@ -1,0 +1,5 @@
+# Pin Node 22 LTS (better-sqlite3 ships prebuilt binaries for it) and
+# include Python + a C toolchain so any native-module fallback to
+# node-gyp still succeeds instead of erroring on missing Python.
+[phases.setup]
+nixPkgs = ["nodejs_22", "python3", "gcc", "gnumake"]
