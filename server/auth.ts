@@ -1,4 +1,4 @@
-import { randomBytes, randomUUID, scryptSync, timingSafeEqual } from "node:crypto";
+import { randomUUID, scryptSync, timingSafeEqual } from "node:crypto";
 import express from "express";
 import { db } from "./db.ts";
 
@@ -9,20 +9,6 @@ const SCRYPT_COST = 16384; // N
 const SCRYPT_R = 8;
 const SCRYPT_P = 1;
 const KEY_LEN = 64;
-
-/**
- * `salt$hash` — everything scrypt needs to verify a password later, in one
- * self-contained string. No external secret required.
- */
-export function hashPassword(password: string): string {
-  const salt = randomBytes(16).toString("hex");
-  const hash = scryptSync(password, salt, KEY_LEN, {
-    N: SCRYPT_COST,
-    r: SCRYPT_R,
-    p: SCRYPT_P,
-  }).toString("hex");
-  return `${salt}$${hash}`;
-}
 
 export function verifyPassword(password: string, stored: string): boolean {
   const [salt, expected] = stored.split("$");
@@ -40,9 +26,6 @@ export function verifyPassword(password: string, stored: string): boolean {
 export type User = { id: string; username: string };
 export type Session = { id: string; user_id: string; expires_at: number };
 
-const insertUser = db.prepare(
-  "INSERT INTO users (id, username, password_hash, created_at) VALUES (?, ?, ?, ?)",
-);
 const findUserByUsername = db.prepare<[string]>(
   "SELECT id, username, password_hash FROM users WHERE username = ? COLLATE NOCASE",
 );
@@ -59,14 +42,6 @@ const deleteExpired = db.prepare<[number]>("DELETE FROM sessions WHERE expires_a
 
 /** Best-effort cleanup on startup — expired rows serve no purpose. */
 deleteExpired.run(Date.now());
-
-export function createUser(username: string, password: string): User {
-  const id = randomUUID();
-  const now = Date.now();
-  // UNIQUE COLLATE NOCASE on the column raises SQLITE_CONSTRAINT on a dupe.
-  insertUser.run(id, username, hashPassword(password), now);
-  return { id, username };
-}
 
 export function authenticate(username: string, password: string): User | null {
   const row = findUserByUsername.get(username) as

@@ -94,16 +94,6 @@ export async function login(username: string, password: string): Promise<AuthSta
   return (await res.json()) as AuthStatus;
 }
 
-export async function signup(username: string, password: string): Promise<AuthStatus> {
-  const res = await fetch("/api/auth/signup", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username, password }),
-  });
-  if (!res.ok) throw new Error(await readError(res, "Sign-up failed."));
-  return (await res.json()) as AuthStatus;
-}
-
 export async function signOut(): Promise<AuthStatus> {
   const res = await fetch("/api/auth/logout", { method: "POST" });
   return (await res.json()) as AuthStatus;

@@ -6,7 +6,6 @@ import Anthropic from "@anthropic-ai/sdk";
 import {
   COOKIE,
   authenticate,
-  createUser,
   endSession,
   resolveSession,
   setSessionCookie,
@@ -50,9 +49,6 @@ const PORT = Number(
  *  users can sign in and see the app; only /api/chat requires the key. */
 const envKey = process.env.ANTHROPIC_API_KEY?.trim() || null;
 
-const USERNAME_RE = /^[A-Za-z0-9_.-]{3,32}$/;
-const MIN_PASSWORD = 8;
-
 const app = express();
 app.use(express.json({ limit: "4mb" }));
 app.use(cookieParser());
@@ -62,34 +58,6 @@ app.use(cookieParser());
 app.get("/api/auth/status", (req, res) => {
   const user = resolveSession(req.cookies?.[COOKIE]);
   res.json(user ? { authenticated: true, username: user.username } : { authenticated: false });
-});
-
-app.post("/api/auth/signup", (req, res) => {
-  const { username, password } = (req.body ?? {}) as { username?: string; password?: string };
-  if (!username || !USERNAME_RE.test(username)) {
-    res.status(400).json({
-      error: "Username must be 3–32 chars, letters/numbers/underscore/dot/dash only.",
-    });
-    return;
-  }
-  if (!password || password.length < MIN_PASSWORD) {
-    res.status(400).json({ error: `Password must be at least ${MIN_PASSWORD} characters.` });
-    return;
-  }
-
-  try {
-    const user = createUser(username, password);
-    const session = startSession(user.id);
-    setSessionCookie(res, session.id, session.expiresAt);
-    res.status(201).json({ authenticated: true, username: user.username });
-  } catch (error: unknown) {
-    // SQLITE_CONSTRAINT — username uniqueness.
-    if (error instanceof Error && /UNIQUE constraint failed/.test(error.message)) {
-      res.status(409).json({ error: "That username is taken." });
-      return;
-    }
-    throw error;
-  }
 });
 
 app.post("/api/auth/login", (req, res) => {

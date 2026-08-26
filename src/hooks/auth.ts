@@ -1,11 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  getAuthStatus,
-  login,
-  signOut,
-  signup,
-  type AuthStatus,
-} from "../lib/api";
+import { getAuthStatus, login, signOut, type AuthStatus } from "../lib/api";
 
 export function useAuth() {
   return useQuery<AuthStatus>({
@@ -24,11 +18,6 @@ export function useAuthMutations() {
       login(v.username, v.password),
     onSuccess: set,
   });
-  const signupM = useMutation({
-    mutationFn: (v: { username: string; password: string }) =>
-      signup(v.username, v.password),
-    onSuccess: set,
-  });
   const signOutM = useMutation({
     mutationFn: signOut,
     onSuccess: (data) => {
@@ -37,5 +26,5 @@ export function useAuthMutations() {
       qc.removeQueries({ queryKey: ["chat"] });
     },
   });
-  return { login: loginM, signup: signupM, signOut: signOutM };
+  return { login: loginM, signOut: signOutM };
 }

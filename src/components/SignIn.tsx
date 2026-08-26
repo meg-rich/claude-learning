@@ -3,48 +3,37 @@ import { FormattedMessage, defineMessages, useIntl } from "react-intl";
 import { useAuthMutations } from "../hooks/auth";
 import "./SignIn.css";
 
-type Mode = "login" | "signup";
-
 const msgs = defineMessages({
   usernamePlaceholder: { defaultMessage: "jane" },
   passwordPlaceholder: { defaultMessage: "at least 8 characters" },
   usernameAria: { defaultMessage: "Username" },
   passwordAria: { defaultMessage: "Password" },
-  signupFailed: { defaultMessage: "Sign-up failed." },
   signinFailed: { defaultMessage: "Sign-in failed." },
 });
 
 export function SignIn() {
   const intl = useIntl();
-  const { login, signup } = useAuthMutations();
-  const [mode, setMode] = useState<Mode>("login");
+  const { login } = useAuthMutations();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const active = mode === "signup" ? signup : login;
-  const busy = active.isPending;
+  const busy = login.isPending;
   const canSubmit = username.trim().length >= 3 && password.length >= 8;
 
   const errorMessage =
-    active.error instanceof Error
-      ? active.error.message
-      : active.error
-        ? intl.formatMessage(mode === "signup" ? msgs.signupFailed : msgs.signinFailed)
+    login.error instanceof Error
+      ? login.error.message
+      : login.error
+        ? intl.formatMessage(msgs.signinFailed)
         : null;
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
     if (!canSubmit) return;
-    // Reset the other mutation's error so mode switches show a clean slate.
-    (mode === "signup" ? login : signup).reset();
     try {
-      if (mode === "signup") {
-        await signup.mutateAsync({ username: username.trim(), password });
-      } else {
-        await login.mutateAsync({ username: username.trim(), password });
-      }
+      await login.mutateAsync({ username: username.trim(), password });
     } catch {
-      /* error surfaces via active.error */
+      /* error surfaces via login.error */
     }
   }
 
@@ -55,26 +44,7 @@ export function SignIn() {
           <FormattedMessage defaultMessage="claude-learning" />
         </h1>
         <p className="muted">
-          {mode === "signup" ? (
-            <FormattedMessage defaultMessage="Pick a username and password. They're stored on the server; a session cookie keeps you signed in." />
-          ) : (
-            <FormattedMessage defaultMessage="Sign in to pick up your chats. New here?" />
-          )}{" "}
-          <button
-            type="button"
-            className="link"
-            onClick={() => {
-              setMode(mode === "signup" ? "login" : "signup");
-              login.reset();
-              signup.reset();
-            }}
-          >
-            {mode === "signup" ? (
-              <FormattedMessage defaultMessage="Sign in instead." />
-            ) : (
-              <FormattedMessage defaultMessage="Create an account." />
-            )}
-          </button>
+          <FormattedMessage defaultMessage="Sign in to pick up your chats." />
         </p>
 
         <label className="field">
@@ -103,7 +73,7 @@ export function SignIn() {
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             placeholder={intl.formatMessage(msgs.passwordPlaceholder)}
-            autoComplete={mode === "signup" ? "new-password" : "current-password"}
+            autoComplete="current-password"
             minLength={8}
             aria-label={intl.formatMessage(msgs.passwordAria)}
           />
@@ -112,13 +82,7 @@ export function SignIn() {
         {errorMessage && <p className="error">{errorMessage}</p>}
         <button type="submit" disabled={busy || !canSubmit}>
           {busy ? (
-            mode === "signup" ? (
-              <FormattedMessage defaultMessage="Creating…" />
-            ) : (
-              <FormattedMessage defaultMessage="Signing in…" />
-            )
-          ) : mode === "signup" ? (
-            <FormattedMessage defaultMessage="Create account" />
+            <FormattedMessage defaultMessage="Signing in…" />
           ) : (
             <FormattedMessage defaultMessage="Sign in" />
           )}
