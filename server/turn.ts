@@ -89,6 +89,12 @@ const OFFER_BACKGROUND: Anthropic.Tool = {
   description:
     "Offer the user background reading on one concept — but be genuinely conservative. Most " +
     "questions do not need this; a plain, correct reply is almost always enough.\n\n" +
+    "TIMING — critical. If you are going to call this tool, call it BEFORE writing your " +
+    "answer, not after. The panel's whole value is that it fills in while the user reads; " +
+    "a call made late in a long reply arrives after the reader has already moved on. Decide " +
+    "from the user's message itself, not from what you have drafted so far — the signals " +
+    "below are visible in the question, so you can judge up front. When any path applies, " +
+    "calling the tool is your FIRST action of the turn, before any prose.\n\n" +
     "Call it when ANY of these paths applies:\n\n" +
     "  A. FOUNDATIONAL CONFUSION — the topic is a concept, mental model, or body of knowledge " +
     "     that takes more than a paragraph to understand well (not a one-sentence fact), AND " +
