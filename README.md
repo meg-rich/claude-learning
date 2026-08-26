@@ -1,4 +1,4 @@
-# claude-background
+# claude-learning
 
 A minimal Claude chat app with a twist: a **background panel** that quietly
 gathers reading, videos, and quizzes on whatever the conversation drifts into.

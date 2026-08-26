@@ -403,11 +403,11 @@ if (process.env.NODE_ENV === "production" && existsSync("dist")) {
 }
 
 app.listen(PORT, () => {
-  console.log(`[claude-background] API on http://localhost:${PORT}`);
+  console.log(`[claude-learning] API on http://localhost:${PORT}`);
   console.log(
     envKey
-      ? "[claude-background] ANTHROPIC_API_KEY set — /api/chat ready."
-      : "[claude-background] WARNING: no ANTHROPIC_API_KEY set; /api/chat will 503 until it is.",
+      ? "[claude-learning] ANTHROPIC_API_KEY set — /api/chat ready."
+      : "[claude-learning] WARNING: no ANTHROPIC_API_KEY set; /api/chat will 503 until it is.",
   );
 
   // Backfill any offers that predate the learned_topics table so the first

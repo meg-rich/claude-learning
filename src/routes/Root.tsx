@@ -86,7 +86,7 @@ export function Root() {
     <div className="app">
       <header>
         <span className="brand">
-          <FormattedMessage defaultMessage="claude-background" />
+          <FormattedMessage defaultMessage="claude-learning" />
         </span>
         <span className="spacer" />
         <span className="muted small">

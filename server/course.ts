@@ -278,7 +278,7 @@ async function fetchWikipediaThumbnail(
         signal,
         headers: {
           // Wikipedia asks that clients identify themselves.
-          "User-Agent": "claude-background/1.0 (course-generation)",
+          "User-Agent": "claude-learning/1.0 (course-generation)",
           Accept: "application/json",
         },
       });

@@ -8,7 +8,7 @@ import Database from "better-sqlite3";
  *
  * Path is overridable via CB_DATABASE for tests and alternate deployments.
  */
-const DB_PATH = process.env.CB_DATABASE ?? "./data/claude-background.db";
+const DB_PATH = process.env.CB_DATABASE ?? "./data/claude-learning.db";
 mkdirSync(dirname(DB_PATH), { recursive: true });
 
 export const db = new Database(DB_PATH);

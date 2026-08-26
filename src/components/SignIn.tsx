@@ -52,7 +52,7 @@ export function SignIn() {
     <div className="centered">
       <form className="signin" onSubmit={handleSubmit}>
         <h1>
-          <FormattedMessage defaultMessage="claude-background" />
+          <FormattedMessage defaultMessage="claude-learning" />
         </h1>
         <p className="muted">
           {mode === "signup" ? (
