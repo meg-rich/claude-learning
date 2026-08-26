@@ -109,9 +109,24 @@ const OFFER_BACKGROUND: Anthropic.Tool = {
     "     study aid — videos, reading, and (when the topic is recall-heavy) a quiz — exactly " +
     "     what a learner needs. This is NOT the coding-task exclusion below; a study/review " +
     "     request is a positive trigger. Set include_quiz true for recall-heavy subjects.\n\n" +
+    "  D. NEW TO THE WHOLE DOMAIN — the user has flagged themselves as new to the entire area " +
+    '     the question sits in, not just to one term ("I don\'t know much about X," "first time ' +
+    '     dealing with X," "I\'m no expert on X," "never had to think about X before"). Even if ' +
+    "     you can answer the specific question inline, they lack the framework to evaluate the " +
+    "     next one — the primer is for the domain, not the question. This overrides the inline- " +
+    "     correction exclusion below: a tidy checklist in your reply is not a reason to skip the " +
+    "     panel here.\n\n" +
+    "  E. VERDICT WITHOUT FRAMEWORK — the user is asking you to render a judgment " +
+    '     ("do I need this?", "is this normal?", "is this a good deal?", "is this fair?", ' +
+    '     "should I be worried?") in a domain where they have shown they cannot currently ' +
+    "     render one themselves. Answering the immediate question gives them today's verdict; " +
+    "     the primer gives them the criteria to render the next one on their own.\n\n" +
     "Do NOT call it when:\n" +
     "  · The correction is a single line you can just write inline (\"You want f/1.8, not f/16 — " +
-    "    smaller number, bigger opening.\") — no panel needed.\n" +
+    "    smaller number, bigger opening.\") — no panel needed. Note: this exclusion covers " +
+    "    one-sentence corrections of a specific misconception, NOT multi-step checklists or " +
+    "    frameworks written inline; if your reply is itself teaching a way to evaluate something, " +
+    "    that is a signal the panel belongs (see paths D and E), not a reason to skip it.\n" +
     "  · The user is asking a PRODUCTION task (\"write this code\", \"debug this\", \"edit " +
     "    this draft\", \"draft this email\") and the answer is complete without background — " +
     "    panel gets in the way. This does NOT apply to study/review sessions (path C), where " +
