@@ -1,12 +1,16 @@
 import { existsSync } from "node:fs";
 import cookieParser from "cookie-parser";
 import express from "express";
+import helmet from "helmet";
 import { randomUUID } from "node:crypto";
 import Anthropic from "@anthropic-ai/sdk";
 import {
   COOKIE,
   authenticate,
+  clearLoginFailures,
   endSession,
+  loginThrottle,
+  recordLoginFailure,
   resolveSession,
   setSessionCookie,
   startSession,
@@ -50,6 +54,44 @@ const PORT = Number(
 const envKey = process.env.ANTHROPIC_API_KEY?.trim() || null;
 
 const app = express();
+// If the deployment sits behind a reverse proxy (Railway, etc.), honour the
+// X-Forwarded-For header so req.ip reflects the real client, not the proxy.
+// The login throttle is keyed on req.ip, so a wrong value here would either
+// under-limit (every request looks like the proxy) or trivially bypass it.
+app.set("trust proxy", 1);
+
+// Baseline security headers. CSP is spelled out because the app pulls video
+// thumbnails from i.ytimg.com, embeds YouTube's no-cookie iframe, and inlines
+// Wikipedia thumbnails in course markdown; helmet's default policy would
+// block all three. COEP is disabled for the same reason — its default
+// (require-corp) rejects any third-party image or frame that doesn't opt in.
+app.use(
+  helmet({
+    crossOriginEmbedderPolicy: false,
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        baseUri: ["'self'"],
+        formAction: ["'self'"],
+        frameAncestors: ["'self'"],
+        objectSrc: ["'none'"],
+        scriptSrc: ["'self'"],
+        // React inline styles (e.g. dynamic background-image URLs) need this.
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        imgSrc: [
+          "'self'",
+          "data:",
+          "https://i.ytimg.com",
+          "https://upload.wikimedia.org",
+        ],
+        frameSrc: ["https://www.youtube-nocookie.com"],
+        connectSrc: ["'self'"],
+        upgradeInsecureRequests: null,
+      },
+    },
+  }),
+);
+
 app.use(express.json({ limit: "4mb" }));
 app.use(cookieParser());
 
@@ -66,12 +108,21 @@ app.post("/api/auth/login", (req, res) => {
     res.status(400).json({ error: "Username and password are required." });
     return;
   }
+  const ip = req.ip ?? "unknown";
+  const throttle = loginThrottle(ip, username);
+  if (throttle.blocked) {
+    res.setHeader("Retry-After", String(throttle.retryAfterSec));
+    res.status(429).json({ error: "Too many attempts. Try again in a few minutes." });
+    return;
+  }
   const user = authenticate(username, password);
   if (!user) {
+    recordLoginFailure(ip, username);
     // Deliberately vague — don't leak which of username or password is wrong.
     res.status(401).json({ error: "Wrong username or password." });
     return;
   }
+  clearLoginFailures(ip, username);
   const session = startSession(user.id);
   setSessionCookie(res, session.id, session.expiresAt);
   res.json({ authenticated: true, username: user.username });
