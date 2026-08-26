@@ -37,7 +37,7 @@ export type IntakeAnswer = { question: string; answer: string };
 const COURSE_TOOL: Anthropic.Tool = {
   name: "report_course",
   description:
-    "File the course. Call this exactly once, when you know the full syllabus.",
+    "File the module. Call this exactly once, when you know the full lesson plan.",
   strict: true,
   input_schema: {
     type: "object",
@@ -45,20 +45,21 @@ const COURSE_TOOL: Anthropic.Tool = {
     properties: {
       title: {
         type: "string",
-        description: 'Course title, e.g. "Introduction to Statistical Inference".',
+        description: 'Module title, e.g. "Sampling Distributions".',
       },
       overview: {
         type: "string",
         description:
-          "2-3 sentence summary of what the course covers and who it's for — plain, not marketing.",
+          "2-3 sentence summary of what the module covers and who it's for — plain, not marketing.",
       },
       modules: {
         type: "array",
+        description: "3-4 lessons that build on each other, gentlest first.",
         items: {
           type: "object",
           additionalProperties: false,
           properties: {
-            name: { type: "string", description: 'Short module name — e.g. "Sampling Distributions".' },
+            name: { type: "string", description: 'Short lesson name — e.g. "The Central Limit Theorem".' },
             objective: {
               type: "string",
               description:
@@ -67,12 +68,12 @@ const COURSE_TOOL: Anthropic.Tool = {
             concepts: {
               type: "array",
               items: { type: "string" },
-              description: "3-5 concrete concepts or techniques covered in this module.",
+              description: "3-5 concrete concepts or techniques covered in this lesson.",
             },
             first_prompt: {
               type: "string",
               description:
-                "The exact message the learner should send in a fresh chat to start this module — short, actionable, and framed to invite tutoring rather than a lecture.",
+                "The exact message the learner should send in a fresh chat to start this lesson — short, actionable, and framed to invite tutoring rather than a lecture.",
             },
           },
           required: ["name", "objective", "concepts", "first_prompt"],
@@ -190,29 +191,29 @@ export async function generateCourse({
   const response = await client.messages.create(
     {
       model: GATHER_MODEL,
-      max_tokens: 4000,
+      max_tokens: 2500,
       tools: [COURSE_TOOL],
       tool_choice: { type: "tool", name: COURSE_TOOL.name },
       messages: [
         {
           role: "user",
-          content: `Design a short structured course on: ${topic}
+          content: `Design a short, focused learning module on: ${topic}
 ${
   intake && intake.length > 0
     ? `\nWhat the learner told you about themselves:\n${intake
         .map((row) => `  · ${row.question} — ${row.answer}`)
-        .join("\n")}\n\nTailor the syllabus to those answers.`
+        .join("\n")}\n\nTailor the lesson plan to those answers.`
     : ""
 }
-Aim for 4-6 modules that build on each other, gentlest first. For each module:
+Aim for 3-4 lessons that build on each other, gentlest first. Keep the scope tight — this is
+one module, not a full course. For each lesson:
 - a short name
 - one-sentence learning objective, phrased "By the end you can…"
 - 3-5 concrete concepts
-- a "first prompt" the learner can paste into a fresh tutoring chat to start that module
+- a "first prompt" the learner can paste into a fresh tutoring chat to start that lesson
 
-Write the top-level overview in 2-3 sentences — plain, not marketing. The learner will follow
-this as a curriculum, working through one module per chat session with a tutor, so each
-first_prompt needs to stand alone.`,
+Write the top-level overview in 2-3 sentences — plain, not marketing. The learner will work
+through one lesson per chat session with a tutor, so each first_prompt needs to stand alone.`,
         },
       ],
     },
@@ -377,12 +378,12 @@ export function renderCourseAsText(course: Course): string {
   }
   lines.push("");
   lines.push(
-    "_How to use this: start a fresh chat for each module and paste its first prompt._",
+    "_How to use this: start a fresh chat for each lesson and paste its first prompt._",
   );
 
   course.modules.forEach((module, i) => {
     lines.push("");
-    lines.push(`## Module ${i + 1} · ${module.name}`);
+    lines.push(`## Lesson ${i + 1} · ${module.name}`);
     if (module.image) {
       lines.push("");
       lines.push(`![${mdEscape(module.image.alt)}](${module.image.url})`);

@@ -41,6 +41,7 @@ export type DailyQuiz = {
   questions: QuizQuestion[];
   answers: number[] | null;
   score: number | null;
+  generatedAt: number;
   completedAt: number | null;
   dismissedAt: number | null;
 };
@@ -56,6 +57,7 @@ export function rowToDailyQuiz(row: DailyQuizRow): DailyQuiz {
     questions: JSON.parse(row.questions_json) as QuizQuestion[],
     answers: row.answers_json ? (JSON.parse(row.answers_json) as number[]) : null,
     score: row.score,
+    generatedAt: row.generated_at,
     completedAt: row.completed_at,
     dismissedAt: row.dismissed_at,
   };

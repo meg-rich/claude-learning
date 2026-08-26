@@ -8,6 +8,9 @@
   "/GCoTA": {
     "defaultMessage": "Clear"
   },
+  "/GCwJY": {
+    "defaultMessage": "Modules in progress"
+  },
   "/PbiT/": {
     "defaultMessage": "Claude is responding"
   },
@@ -26,9 +29,6 @@
   "1cEM2Y": {
     "defaultMessage": "Chalking up the whiteboard…"
   },
-  "1gzDa7": {
-    "defaultMessage": "Generate a full course on this →"
-  },
   "2J0s+9": {
     "defaultMessage": "…"
   },
@@ -44,8 +44,17 @@
   "4PjoX4": {
     "defaultMessage": "Claude"
   },
+  "4YItr0": {
+    "defaultMessage": "Hide until tomorrow"
+  },
   "4bQgtT": {
     "defaultMessage": "Check yourself"
+  },
+  "5G/mIW": {
+    "defaultMessage": "Review concepts you've been learning across chats."
+  },
+  "5bZdPr": {
+    "defaultMessage": "Hide today's quiz"
   },
   "5sg7KC": {
     "defaultMessage": "Password"
@@ -53,11 +62,14 @@
   "5uwOG/": {
     "defaultMessage": "signed in as {username}"
   },
-  "6SlxLW": {
-    "defaultMessage": "Drafting the syllabus"
+  "6+p+DO": {
+    "defaultMessage": "Daily Review"
   },
   "6ki/F6": {
     "defaultMessage": "Writing questions…"
+  },
+  "6m7FLF": {
+    "defaultMessage": "Generating a module on"
   },
   "7bS0ft": {
     "defaultMessage": "at least 8 characters"
@@ -67,6 +79,9 @@
   },
   "82nk12": {
     "defaultMessage": "— Claude decides when it needs to"
+  },
+  "8VOr2H": {
+    "defaultMessage": "Reopen today's completed quiz"
   },
   "9UM9/8": {
     "defaultMessage": "Delete {title}"
@@ -86,8 +101,8 @@
   "ATDyLP": {
     "defaultMessage": "New chat"
   },
-  "BPCxXZ": {
-    "defaultMessage": "A few quick questions so the syllabus fits you."
+  "BSUPOG": {
+    "defaultMessage": "Module: {topic}"
   },
   "CCXYT+": {
     "defaultMessage": "Alphabetizing the flashcards…"
@@ -110,14 +125,17 @@
   "EX3nvv": {
     "defaultMessage": "Sign-up failed."
   },
-  "EY0ceD": {
-    "defaultMessage": "Drafting syllabus…"
+  "EXvUxm": {
+    "defaultMessage": "New quiz"
   },
   "EuM/kh": {
     "defaultMessage": "Sketching the lesson arcs…"
   },
   "F2lyKp": {
     "defaultMessage": "jane"
+  },
+  "F5OTTF": {
+    "defaultMessage": "Create a module on this →"
   },
   "GujwFo": {
     "defaultMessage": "Expand learn panel"
@@ -131,11 +149,20 @@
   "IK1aVQ": {
     "defaultMessage": "Shrink"
   },
+  "IZFEUg": {
+    "defaultMessage": "Ready"
+  },
   "IbrSk1": {
     "defaultMessage": "Learn"
   },
   "JCIgkj": {
     "defaultMessage": "Username"
+  },
+  "JXdbo8": {
+    "defaultMessage": "Done"
+  },
+  "KDhqG/": {
+    "defaultMessage": "Generate quiz"
   },
   "KN7zKn": {
     "defaultMessage": "Error"
@@ -143,11 +170,8 @@
   "KV+O0y": {
     "defaultMessage": "Practice"
   },
-  "Kwoc2C": {
-    "defaultMessage": "Cancel course: {topic}"
-  },
-  "NAINhY": {
-    "defaultMessage": "Courses in progress"
+  "MPS0Lp": {
+    "defaultMessage": "Daily review quiz"
   },
   "NMqtcK": {
     "defaultMessage": "Sign-in failed."
@@ -157,6 +181,12 @@
   },
   "OneC/H": {
     "defaultMessage": "Fluffing the office hours…"
+  },
+  "OuR/Ij": {
+    "defaultMessage": "Quiz"
+  },
+  "QTl2Ex": {
+    "defaultMessage": "Claude is deciding which lessons to include — usually three or four."
   },
   "QlWnTw": {
     "defaultMessage": "Finding videos on this…"
@@ -185,11 +215,11 @@
   "T7Ry38": {
     "defaultMessage": "Message"
   },
+  "TuSL+Z": {
+    "defaultMessage": "Minimize"
+  },
   "U/wJNj": {
     "defaultMessage": "· {count, plural, one {# result} other {# results}}"
-  },
-  "U29g2F": {
-    "defaultMessage": "Claude is deciding which modules to include — usually five or six."
   },
   "VQSRrz": {
     "defaultMessage": "Sign in to pick up your chats. New here?"
@@ -197,14 +227,29 @@
   "XL9krb": {
     "defaultMessage": "{done} / {total}"
   },
+  "aBt1TE": {
+    "defaultMessage": "Building your module"
+  },
   "aN+S8r": {
     "defaultMessage": "Earlier in this chat"
   },
   "aaiLWk": {
     "defaultMessage": "Watch"
   },
+  "aez6Th": {
+    "defaultMessage": "Retention comes from the reps, not the score."
+  },
+  "bLlBoe": {
+    "defaultMessage": "A few quick questions so the module fits you."
+  },
   "bW7B87": {
     "defaultMessage": "New"
+  },
+  "bX5KoL": {
+    "defaultMessage": "Drafting lessons…"
+  },
+  "dU5kJN": {
+    "defaultMessage": "Minimize quiz to a pill"
   },
   "eYcHs7": {
     "defaultMessage": "What are we working on?"
@@ -220,6 +265,9 @@
   },
   "fHfBR8": {
     "defaultMessage": "Streaming from {model} with adaptive thinking."
+  },
+  "fXP3k1": {
+    "defaultMessage": "Create module"
   },
   "fhwTpA": {
     "defaultMessage": "Sources"
@@ -245,11 +293,17 @@
   "huqKGl": {
     "defaultMessage": "Create account"
   },
+  "iOvuhZ": {
+    "defaultMessage": "Test your knowledge"
+  },
   "ibUSAQ": {
     "defaultMessage": "Question {current} of {total}"
   },
-  "jND/9A": {
-    "defaultMessage": "Cancel course"
+  "iyWkH6": {
+    "defaultMessage": "Cancel module"
+  },
+  "j3MdEz": {
+    "defaultMessage": "Turn this topic into a short module — 3–4 lessons with readings and videos, ready to work through."
   },
   "jNG4M6": {
     "defaultMessage": "· {done}/{total}"
@@ -263,6 +317,9 @@
   "kCQzZZ": {
     "defaultMessage": "Retry quiz"
   },
+  "kEbyXS": {
+    "defaultMessage": "Module"
+  },
   "kJ5W29": {
     "defaultMessage": "You"
   },
@@ -272,14 +329,11 @@
   "lJTHyS": {
     "defaultMessage": "Finding hands-on material…"
   },
-  "miyfEB": {
-    "defaultMessage": "Generate course"
+  "mOFG3K": {
+    "defaultMessage": "Start"
   },
   "ngIzbj": {
     "defaultMessage": "Delete chat"
-  },
-  "oAdVkQ": {
-    "defaultMessage": "Generating a course on"
   },
   "od7tYK": {
     "defaultMessage": "Your answer…"
@@ -287,11 +341,14 @@
   "onDfe/": {
     "defaultMessage": "Course"
   },
-  "oyljdI": {
-    "defaultMessage": "Building your course"
+  "p9LlHO": {
+    "defaultMessage": "Nice — you showed up."
   },
   "q/uwLT": {
     "defaultMessage": "Stop"
+  },
+  "q1WWIr": {
+    "defaultMessage": "In progress"
   },
   "q4Lr3A": {
     "defaultMessage": "Rounding up the reading list…"
@@ -311,14 +368,20 @@
   "s7qQuF": {
     "defaultMessage": "Learn about this topic"
   },
+  "tB02Wz": {
+    "defaultMessage": "Generating…"
+  },
+  "uJjSWd": {
+    "defaultMessage": "Cancel module: {topic}"
+  },
+  "v25zzX": {
+    "defaultMessage": "Drafting the lesson plan"
+  },
   "vdq4Hg": {
     "defaultMessage": "Next question"
   },
   "wVuia0": {
     "defaultMessage": "Awaiting details"
-  },
-  "wsPfql": {
-    "defaultMessage": "Course: {topic}"
   },
   "xXbJso": {
     "defaultMessage": "Sign out"

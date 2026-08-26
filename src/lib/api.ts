@@ -6,10 +6,8 @@ export type AuthStatus =
 
 export type Source = { title: string; url: string };
 
-/** One thing worth reading about a topic, gathered for the background panel. */
 export type LearnLink = { title: string; url: string; site: string; why: string };
 
-/** A YouTube video worth watching about a topic. */
 export type LearnVideo = {
   videoId: string;
   title: string;
@@ -18,7 +16,6 @@ export type LearnVideo = {
   why: string;
 };
 
-/** A hands-on resource: videos, articles, interactive sandboxes, or full courses. */
 export type LearnPractice = {
   kind: "video" | "article" | "sandbox" | "course";
   title: string;
@@ -28,11 +25,9 @@ export type LearnPractice = {
   videoId?: string;
 };
 
-/** One MCQ option; `why` is shown after the user picks. */
 export type QuizOption = { text: string; correct: boolean; why: string };
 export type QuizQuestion = { prompt: string; options: QuizOption[] };
 
-/** A streamed chunk from POST /api/chat. */
 export type ChatEvent =
   | { type: "text"; text: string }
   | { type: "thinking"; text: string }
@@ -155,13 +150,12 @@ export async function deleteChat(id: string): Promise<void> {
   if (!res.ok) throw new Error(await readError(res, "Could not delete chat."));
 }
 
-/* Daily retention quiz — pregenerated in the server, one per user per UTC day. */
-
 export type DailyQuiz = {
   date: string;
   questions: QuizQuestion[];
   answers: number[] | null;
   score: number | null;
+  generatedAt: number;
   completedAt: number | null;
   dismissedAt: number | null;
 };
@@ -238,7 +232,7 @@ export async function* generateCourse(
   if (!res.ok || !res.body) {
     yield {
       type: "error",
-      message: await readError(res, "Could not generate course."),
+      message: await readError(res, "Could not create module."),
     };
     return;
   }
