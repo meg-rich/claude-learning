@@ -44,7 +44,6 @@ export function Chat({ chatId }: ChatProps) {
 
   const [draft, setDraft] = useState("");
   const [streaming, setStreaming] = useState(false);
-  const [webSearch, setWebSearch] = useState(true);
   const abortRef = useRef<AbortController | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -60,7 +59,7 @@ export function Chat({ chatId }: ChatProps) {
     const controller = new AbortController();
     abortRef.current = controller;
     try {
-      await sendMessage(store, chatId, prompt, webSearch, controller.signal);
+      await sendMessage(store, chatId, prompt, true, controller.signal);
     } finally {
       setStreaming(false);
       abortRef.current = null;
@@ -83,11 +82,7 @@ export function Chat({ chatId }: ChatProps) {
               <FormattedMessage defaultMessage="What are we working on?" />
             </h2>
             <p className="muted">
-              {webSearch ? (
-                <FormattedMessage defaultMessage="Streaming from {model} with adaptive thinking and web search." values={{ model: "claude-opus-4-7" }} />
-              ) : (
-                <FormattedMessage defaultMessage="Streaming from {model} with adaptive thinking." values={{ model: "claude-opus-4-7" }} />
-              )}
+              <FormattedMessage defaultMessage="Streaming from {model} with adaptive thinking and web search." values={{ model: "claude-opus-4-7" }} />
             </p>
           </div>
         )}
@@ -221,17 +216,6 @@ export function Chat({ chatId }: ChatProps) {
             </button>
           )}
         </div>
-        <label className="toggle">
-          <input
-            type="checkbox"
-            checked={webSearch}
-            onChange={(event) => setWebSearch(event.target.checked)}
-          />
-          <FormattedMessage defaultMessage="Search the web" />
-          <span className="muted small">
-            <FormattedMessage defaultMessage="— Claude decides when it needs to" />
-          </span>
-        </label>
       </div>
 
       <LearnPanel

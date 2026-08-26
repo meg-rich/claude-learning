@@ -25,12 +25,32 @@ header button {
   font-size: 0.85rem;
 }
 
+/* Hamburger — hidden on desktop; shown on tablet/mobile. */
+.sidebar-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 0.4rem;
+}
+
+.sidebar-toggle:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
 main {
   flex: 1;
   min-height: 0;
   display: flex;
   /* Sidebar left, chat area fills the rest. */
   flex-direction: row;
+  position: relative;
 }
 
 .chat-area {
@@ -38,5 +58,47 @@ main {
   min-width: 0;
   display: flex;
   flex-direction: column;
+}
+
+/* Backdrop — invisible on desktop; overlays the chat area on tablet/mobile
+   when the drawer is open. */
+.sidebar-backdrop {
+  display: none;
+  position: absolute;
+  inset: 0;
+  padding: 0;
+  border: 0;
+  background: rgb(0 0 0 / 45%);
+  /* Above content and the floating pills (z-index 10), below the drawer (21). */
+  z-index: 20;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+  cursor: pointer;
+}
+
+@media (max-width: 56rem) {
+  .sidebar-toggle {
+    display: inline-flex;
+  }
+
+  /* On narrow screens, save room in the header. */
+  .user-chip {
+    display: none;
+  }
+
+  header {
+    padding: 0.6rem 0.8rem;
+    gap: 0.5rem;
+  }
+
+  .sidebar-backdrop {
+    display: block;
+  }
+
+  .app.sidebar-drawer-open .sidebar-backdrop {
+    opacity: 1;
+    pointer-events: auto;
+  }
 }
 

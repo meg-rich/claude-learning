@@ -122,3 +122,15 @@
   justify-content: flex-end;
   flex-wrap: wrap;
 }
+
+/* Secondary treatment for the retry action, matching the accent-on-transparent
+   link-style used by the "Create a module on this" trigger in the learn panel. */
+.bg-quiz-actions .bg-action:not(.primary) {
+  background: transparent;
+  border: 0;
+  color: var(--accent);
+}
+
+.bg-quiz-actions .bg-action:not(.primary):hover {
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+}

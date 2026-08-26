@@ -5,6 +5,8 @@ import { sidebarEntriesAtom } from "../store/chats";
 import "./Sidebar.css";
 
 type Props = {
+  id?: string;
+  open?: boolean;
   activeId: string;
   onSelect: (id: string) => void;
   onNew: () => void;
@@ -106,6 +108,8 @@ function JobChip({ chatId, activeId, onFocus, onCancel }: JobChipProps) {
  * one click away.
  */
 export function Sidebar({
+  id,
+  open,
   activeId,
   onSelect,
   onNew,
@@ -119,7 +123,11 @@ export function Sidebar({
   const jobIds = entries.filter((e) => e.kind === "course-job").map((e) => e.id);
 
   return (
-    <aside className="sidebar" aria-label={intl.formatMessage(msgs.chatsAria)}>
+    <aside
+      id={id}
+      className={`sidebar ${open ? "sidebar-open" : ""}`}
+      aria-label={intl.formatMessage(msgs.chatsAria)}
+    >
       <div className="sidebar-hd">
         <span className="sidebar-title">
           <FormattedMessage defaultMessage="Chats" />

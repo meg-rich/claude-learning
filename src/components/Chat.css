@@ -287,23 +287,6 @@
   gap: 0.6rem;
 }
 
-.toggle {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  margin-top: 0.55rem;
-  font-size: 0.85rem;
-  color: var(--text);
-  cursor: pointer;
-  user-select: none;
-}
-
-.toggle input {
-  width: auto;
-  margin: 0;
-  accent-color: var(--accent);
-}
-
 .composer textarea {
   resize: none;
   min-height: 3rem;
@@ -317,5 +300,21 @@
   .transcript,
   .composer {
     padding-bottom: 4.5rem;
+  }
+}
+
+@media (max-width: 42rem) {
+  .transcript {
+    padding: 1rem 0.9rem 4.5rem;
+  }
+
+  .composer {
+    padding: 0 0.9rem 1rem;
+  }
+
+  .turn {
+    grid-template-columns: 3rem 1fr;
+    gap: 0.5rem;
+    margin-bottom: 1.1rem;
   }
 }

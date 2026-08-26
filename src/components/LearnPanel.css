@@ -47,6 +47,11 @@
   color: var(--accent);
   background: color-mix(in srgb, var(--accent) 18%, transparent);
   letter-spacing: 0;
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+  padding: 0 0.4rem;
+  border-radius: 999px;
+  line-height: 1.4;
 }
 
 /* Header */
@@ -520,6 +525,8 @@
 .bg-practice-wrap {
   display: grid;
   gap: 0.75rem;
+}
+
 /* Animated Claude spark — sits in place of the dot on the collapsed pill
    whenever a gather is still in flight. Rotates continuously and breathes. */
 
@@ -590,9 +597,8 @@
   bottom: 1.25rem;
 }
 
-/* At the larger size the video grid can go two-up for less scrolling. */
-@media (min-width: 68rem) {
-  .bg-panel-expanded .bg-videos {
-    grid-template-columns: 1fr 1fr;
-  }
+/* The expanded panel is wide enough for a two-up video grid — the whole
+   point of expanding is to see more at once. */
+.bg-panel-expanded .bg-videos {
+  grid-template-columns: 1fr 1fr;
 }

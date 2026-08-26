@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { FormattedMessage } from "react-intl";
+import { useCallback, useEffect, useState } from "react";
+import { FormattedMessage, useIntl, defineMessages } from "react-intl";
 import { Navigate, Outlet, useMatch, useNavigate } from "react-router-dom";
 import { useSetAtom, useStore } from "jotai";
 import { Sidebar } from "../components/Sidebar";
@@ -12,16 +12,25 @@ import { cancelCourseJob } from "../streams/runCourseGeneration";
 import { useSaveEffect } from "../store/saveEffect";
 import "./Root.css";
 
+const msgs = defineMessages({
+  openSidebar: { defaultMessage: "Open chat list" },
+  closeSidebar: { defaultMessage: "Close chat list" },
+  closeSidebarBackdrop: { defaultMessage: "Close chat list" },
+});
+
 export function Root() {
   const auth = useAuth();
   const authM = useAuthMutations();
   const chatM = useChatMutations();
   const navigate = useNavigate();
   const store = useStore();
+  const intl = useIntl();
   const setChatIds = useSetAtom(chatIdsAtom);
   const chatList = useChatList(auth.data?.authenticated === true);
   const match = useMatch("/chats/:id");
   const activeId = match?.params.id ?? "";
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const closeSidebar = useCallback(() => setSidebarOpen(false), []);
 
   // Keep chatIdsAtom populated from the server chat list so the save effect
   // observes every persisted chat, not just the active one. Also seed each
@@ -66,6 +75,7 @@ export function Root() {
   if (!auth.data?.authenticated) return <Navigate to="/signin" replace />;
 
   const onNew = () => {
+    closeSidebar();
     void chatM.create.mutateAsync().then((chat) => navigate(`/chats/${chat.id}`));
   };
 
@@ -83,13 +93,34 @@ export function Root() {
   };
 
   return (
-    <div className="app">
+    <div className={`app ${sidebarOpen ? "sidebar-drawer-open" : ""}`}>
       <header>
+        <button
+          type="button"
+          className="sidebar-toggle"
+          aria-label={intl.formatMessage(sidebarOpen ? msgs.closeSidebar : msgs.openSidebar)}
+          aria-expanded={sidebarOpen}
+          aria-controls="app-sidebar"
+          onClick={() => setSidebarOpen((v) => !v)}
+        >
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            aria-hidden="true"
+          >
+            <path d="M3 6h18M3 12h18M3 18h18" />
+          </svg>
+        </button>
         <span className="brand">
           <FormattedMessage defaultMessage="claude-learning" />
         </span>
         <span className="spacer" />
-        <span className="muted small">
+        <span className="muted small user-chip">
           <FormattedMessage
             defaultMessage="signed in as {username}"
             values={{ username: auth.data.username }}
@@ -100,12 +131,27 @@ export function Root() {
         </button>
       </header>
       <main>
+        <button
+          type="button"
+          className="sidebar-backdrop"
+          aria-label={intl.formatMessage(msgs.closeSidebarBackdrop)}
+          onClick={closeSidebar}
+          tabIndex={sidebarOpen ? 0 : -1}
+        />
         <Sidebar
+          id="app-sidebar"
+          open={sidebarOpen}
           activeId={activeId}
-          onSelect={(id) => navigate(`/chats/${id}`)}
+          onSelect={(id) => {
+            closeSidebar();
+            navigate(`/chats/${id}`);
+          }}
           onNew={onNew}
           onDelete={onDelete}
-          onFocusJob={(id) => navigate(`/chats/${id}`)}
+          onFocusJob={(id) => {
+            closeSidebar();
+            navigate(`/chats/${id}`);
+          }}
           onCancelJob={(id) => cancelCourseJob(store, id)}
         />
         <section className="chat-area">
