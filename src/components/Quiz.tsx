@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { FormattedMessage } from "react-intl";
 import type { QuizQuestion } from "../lib/api";
+import "./Quiz.css";
 
 type Props = {
   questions: QuizQuestion[];
@@ -10,6 +11,14 @@ type Props = {
   /** When true, the quiz starts already in the "done" state showing the score,
    *  with previously picked answers marked. Used to render historical results. */
   reviewOf?: { answers: number[]; score: number };
+  /** Optional banner rendered above the score on the done screen. Used by the
+   *  daily quiz to celebrate completion regardless of score — retention is
+   *  about showing up, not perfection. */
+  completionBanner?: ReactNode;
+  /** Optional extra button(s) rendered alongside the Retry button on the
+   *  done screen. Used by the daily quiz to add a "Done" action that
+   *  dismisses the panel. */
+  completionActions?: ReactNode;
 };
 
 /**
@@ -19,7 +28,13 @@ type Props = {
  * panel mounted it, so a re-render of the surrounding topic list does not
  * restart it. Once the last question is answered, we show a summary line.
  */
-export function Quiz({ questions, onComplete, reviewOf }: Props) {
+export function Quiz({
+  questions,
+  onComplete,
+  reviewOf,
+  completionBanner,
+  completionActions,
+}: Props) {
   const [index, setIndex] = useState(0);
   const [picked, setPicked] = useState<number | null>(null);
   const [correctCount, setCorrectCount] = useState(reviewOf?.score ?? 0);
@@ -58,6 +73,7 @@ export function Quiz({ questions, onComplete, reviewOf }: Props) {
   if (done) {
     return (
       <div className="bg-quiz bg-quiz-done">
+        {completionBanner}
         <div className="bg-quiz-summary">
           <FormattedMessage
             defaultMessage="You got <strong>{correctCount}</strong> of <strong>{total}</strong> right."
@@ -68,9 +84,12 @@ export function Quiz({ questions, onComplete, reviewOf }: Props) {
             }}
           />
         </div>
-        <button type="button" className="bg-action" onClick={reset}>
-          <FormattedMessage defaultMessage="Retry quiz" />
-        </button>
+        <div className="bg-quiz-actions">
+          <button type="button" className="bg-action" onClick={reset}>
+            <FormattedMessage defaultMessage="Retry quiz" />
+          </button>
+          {completionActions}
+        </div>
       </div>
     );
   }

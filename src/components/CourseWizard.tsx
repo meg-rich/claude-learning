@@ -12,6 +12,7 @@ import {
   setAnswer,
   submitJob,
 } from "../streams/runCourseGeneration";
+import "./CourseWizard.css";
 
 type Props = {
   chatId: string;
@@ -38,8 +39,12 @@ const generatingPhraseMessages: MessageDescriptor[] = Object.values(
 );
 
 const msgs = defineMessages({
-  buildingCourseAria: { defaultMessage: "Building your course" },
+  buildingCourseAria: { defaultMessage: "Building your module" },
   answerPlaceholder: { defaultMessage: "Your answer…" },
+  createModuleTooltip: {
+    defaultMessage:
+      "Turn this topic into a short module — 3–4 lessons with readings and videos, ready to work through.",
+  },
 });
 
 function StepIcon({ done }: { done: boolean }) {
@@ -161,12 +166,12 @@ export function CourseWizard({ chatId }: Props) {
           <li className={`course-plan-step ${total > 0 ? "done" : "active"}`}>
             <StepIcon done={total > 0} />
             <span>
-              <FormattedMessage defaultMessage="Drafting the syllabus" />
+              <FormattedMessage defaultMessage="Drafting the lesson plan" />
             </span>
           </li>
           {total === 0 && job.progress.phase === "drafting" && (
             <li className="course-plan-hint muted small">
-              <FormattedMessage defaultMessage="Claude is deciding which modules to include — usually five or six." />
+              <FormattedMessage defaultMessage="Claude is deciding which lessons to include — usually three or four." />
             </li>
           )}
           {total > 0 && (
@@ -224,7 +229,7 @@ export function CourseWizard({ chatId }: Props) {
   return (
     <div className="course-wizard">
       <p className="muted small course-wizard-lede">
-        <FormattedMessage defaultMessage="A few quick questions so the syllabus fits you." />
+        <FormattedMessage defaultMessage="A few quick questions so the module fits you." />
       </p>
       <ol className="course-wizard-questions">
         {job.questions.map((question, index) => (
@@ -263,8 +268,13 @@ export function CourseWizard({ chatId }: Props) {
         <button type="button" className="bg-action ghost" onClick={onCancel}>
           <FormattedMessage defaultMessage="Cancel" />
         </button>
-        <button type="button" className="bg-action" onClick={onSubmit}>
-          <FormattedMessage defaultMessage="Generate course" />
+        <button
+          type="button"
+          className="bg-action"
+          onClick={onSubmit}
+          title={intl.formatMessage(msgs.createModuleTooltip)}
+        >
+          <FormattedMessage defaultMessage="Create module" />
         </button>
       </div>
     </div>

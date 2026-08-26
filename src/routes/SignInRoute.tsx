@@ -1,7 +1,7 @@
 import { FormattedMessage } from "react-intl";
 import { Navigate } from "react-router-dom";
 import { SignIn } from "../components/SignIn";
-import { useAuth } from "../queries/useAuth";
+import { useAuth } from "../hooks/auth";
 
 export function SignInRoute() {
   const auth = useAuth();

@@ -7,6 +7,7 @@ import type {
   QuizQuestion,
 } from "../lib/api";
 import { Quiz } from "./Quiz";
+import "./LearnPanel.css";
 
 const msgs = defineMessages({
   learnAria: { defaultMessage: "Learn about this topic" },
@@ -414,7 +415,7 @@ export function LearnPanel({ offers, onDismiss, onGenerateCourse }: Props) {
           className="bg-generate-course"
           onClick={() => onGenerateCourse(showing.topic)}
         >
-          <FormattedMessage defaultMessage="Generate a full course on this →" />
+          <FormattedMessage defaultMessage="Create a module on this →" />
         </button>
       )}
 

@@ -1,9 +1,8 @@
 import { useEffect, useRef } from "react";
 import { FormattedMessage } from "react-intl";
 import { useNavigate } from "react-router-dom";
-import { useChatList } from "../queries/useChatList";
-import { useChatMutations } from "../mutations/useChatMutations";
-import { useAuth } from "../queries/useAuth";
+import { useAuth } from "../hooks/auth";
+import { useChatList, useChatMutations } from "../hooks/chats";
 
 export function IndexRedirect() {
   const nav = useNavigate();

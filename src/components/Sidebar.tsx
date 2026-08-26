@@ -2,6 +2,7 @@ import { FormattedMessage, defineMessages, useIntl, type IntlShape } from "react
 import { useAtomValue } from "jotai";
 import { courseJobFamily, type CourseJob } from "../store/courseJobs";
 import { sidebarEntriesAtom } from "../store/chats";
+import "./Sidebar.css";
 
 type Props = {
   activeId: string;
@@ -16,16 +17,16 @@ const msgs = defineMessages({
   preparing: { defaultMessage: "Preparing…" },
   awaiting: { defaultMessage: "Awaiting details" },
   error: { defaultMessage: "Error" },
-  drafting: { defaultMessage: "Drafting syllabus…" },
+  drafting: { defaultMessage: "Drafting lessons…" },
   chatsAria: { defaultMessage: "Chats" },
   newChatTitle: { defaultMessage: "New chat" },
-  coursesInProgressAria: { defaultMessage: "Courses in progress" },
-  cancelCourseAria: { defaultMessage: "Cancel course: {topic}" },
-  cancelCourseTitle: { defaultMessage: "Cancel course" },
+  coursesInProgressAria: { defaultMessage: "Modules in progress" },
+  cancelCourseAria: { defaultMessage: "Cancel module: {topic}" },
+  cancelCourseTitle: { defaultMessage: "Cancel module" },
   deleteChatAria: { defaultMessage: "Delete {title}" },
   deleteChatFallback: { defaultMessage: "chat" },
   deleteChatTitle: { defaultMessage: "Delete chat" },
-  courseTitle: { defaultMessage: "Course: {topic}" },
+  courseTitle: { defaultMessage: "Module: {topic}" },
   newChatFallback: { defaultMessage: "New chat" },
 });
 
@@ -66,7 +67,7 @@ function JobChip({ chatId, activeId, onFocus, onCancel }: JobChipProps) {
       >
         <span className="sidebar-job-eyebrow">
           {!isError && <span className="sidebar-job-spinner" aria-hidden="true" />}
-          <FormattedMessage defaultMessage="Course" />
+          <FormattedMessage defaultMessage="Module" />
         </span>
         <span className="sidebar-job-topic">{job.topic}</span>
         <span className="sidebar-job-status">{jobStatus(intl, job)}</span>

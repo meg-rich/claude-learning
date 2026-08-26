@@ -1,11 +1,20 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   createChat,
   deleteChat,
+  listChats,
   type ChatRecord,
   type ChatSummary,
 } from "../lib/api";
 import { router } from "../app/router";
+
+export function useChatList(enabled: boolean) {
+  return useQuery<ChatSummary[]>({
+    queryKey: ["chats"],
+    queryFn: listChats,
+    enabled,
+  });
+}
 
 export function useChatMutations() {
   const qc = useQueryClient();

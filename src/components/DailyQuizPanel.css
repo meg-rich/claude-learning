@@ -1,0 +1,309 @@
+/* Daily retention quiz — floating, top right. Same visual language as the
+   background panel (bg-*) so the two read as one system. */
+
+.dq-panel,
+.dq-pill-wrap {
+  position: fixed;
+  top: 4rem;
+  right: 1.25rem;
+  z-index: 10;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow:
+    0 1px 2px rgb(0 0 0 / 6%),
+    0 12px 32px rgb(0 0 0 / 14%);
+}
+
+.dq-panel {
+  width: 26rem;
+  max-height: min(36rem, calc(100vh - 6rem));
+  border-radius: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Kept in the DOM (Quiz state preserved) but visually gone. */
+.dq-panel-hidden {
+  display: none;
+}
+
+/* Floating "Generate quiz" button — always-on, bottom left. */
+.dq-fab-wrap {
+  position: fixed;
+  left: 1rem;
+  bottom: 1rem;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.dq-fab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--accent);
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow:
+    0 1px 2px rgb(0 0 0 / 6%),
+    0 8px 24px rgb(0 0 0 / 12%);
+}
+
+.dq-fab:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+
+.dq-fab:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.dq-fab-error {
+  max-width: 18rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 0.4rem;
+  background: color-mix(in srgb, var(--error, #b03030) 12%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--error, #b03030) 40%, var(--border));
+  color: var(--error, #b03030);
+  line-height: 1.35;
+}
+
+/* Positive completion banner shown regardless of score. */
+.dq-celebrate {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  padding: 0.65rem 0.75rem;
+  margin-bottom: 0.75rem;
+  border-radius: 0.55rem;
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+}
+
+.dq-celebrate-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.4rem;
+  height: 1.4rem;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--surface, white);
+}
+
+.dq-celebrate-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  line-height: 1.35;
+}
+
+.dq-celebrate-text strong {
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.dq-pill-wrap {
+  display: inline-flex;
+  align-items: stretch;
+  border-radius: 999px;
+  padding: 0;
+  overflow: hidden;
+}
+
+.dq-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.85rem;
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.dq-pill:hover {
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+
+.dq-pill-check {
+  color: var(--accent);
+  font-size: 0.8rem;
+  line-height: 1;
+}
+
+.dq-pill-score {
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+  border-radius: 999px;
+  padding: 0.05rem 0.4rem;
+  letter-spacing: 0;
+  font-size: 0.65rem;
+}
+
+.dq-pill-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.5rem;
+  border: 0;
+  border-left: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted, currentColor);
+  cursor: pointer;
+}
+
+.dq-pill-close:hover {
+  color: var(--accent);
+}
+
+.dq-hd {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.85rem 0.9rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.dq-hd-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.dq-hd-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.dq-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.3rem;
+}
+
+.dq-dot {
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent);
+}
+
+.dq-title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.dq-subtitle {
+  margin: 0.2rem 0 0;
+  line-height: 1.35;
+}
+
+/* The shared Quiz card carries its own border+padding for the LearnPanel
+   context; inside the daily-quiz panel it sits directly on the panel surface,
+   so drop those to avoid a double-border. */
+.dq-body .bg-quiz {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+/* The base `button` rule pads at 0.5rem 1rem, which reads chunky in the
+   compact daily-quiz panel. Scale action buttons inside the panel down a step. */
+.dq-body .bg-action {
+  padding: 0.35rem 0.85rem;
+  font-size: 0.85rem;
+  border-radius: 0.45rem;
+}
+
+.dq-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 0.4rem;
+  background: transparent;
+  /* var(--muted) reads on both light and dark surfaces; currentColor was
+     matching the panel background at low opacity, so the icons vanished. */
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.dq-icon-btn:hover:not(:disabled) {
+  color: var(--text);
+  border-color: var(--border);
+}
+
+.dq-icon-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.dq-spin {
+  width: 0.75rem;
+  height: 0.75rem;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: dq-spin 0.9s linear infinite;
+}
+
+@keyframes dq-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.dq-body {
+  padding: 0.85rem 0.9rem;
+  overflow: auto;
+}
+
+.dq-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  align-items: flex-start;
+}
+
+.dq-intro-sub {
+  margin: 0;
+  line-height: 1.4;
+}
+
+.dq-error {
+  margin: 0.5rem 0.9rem 0;
+  color: var(--danger, #b03030);
+}
+
+@media (max-width: 42rem) {
+  .dq-panel {
+    width: min(26rem, calc(100vw - 2rem));
+    right: 1rem;
+  }
+}

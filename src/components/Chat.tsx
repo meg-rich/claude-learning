@@ -8,6 +8,7 @@ import { chatFamily } from "../store/chats";
 import { beginCourse } from "../store/courseJobs";
 import { sendMessage } from "../streams/streamChatToAtom";
 import { LearnPanel } from "./LearnPanel";
+import "./Chat.css";
 
 const msgs = defineMessages({
   composerPlaceholder: {

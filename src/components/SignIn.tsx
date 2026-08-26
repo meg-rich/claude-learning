@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { FormattedMessage, defineMessages, useIntl } from "react-intl";
-import { useAuthMutations } from "../mutations/useAuthMutations";
+import { useAuthMutations } from "../hooks/auth";
+import "./SignIn.css";
 
 type Mode = "login" | "signup";
 

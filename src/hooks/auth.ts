@@ -1,5 +1,19 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { login, signup, signOut, type AuthStatus } from "../lib/api";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  getAuthStatus,
+  login,
+  signOut,
+  signup,
+  type AuthStatus,
+} from "../lib/api";
+
+export function useAuth() {
+  return useQuery<AuthStatus>({
+    queryKey: ["auth"],
+    queryFn: getAuthStatus,
+    staleTime: Infinity,
+  });
+}
 
 export function useAuthMutations() {
   const qc = useQueryClient();

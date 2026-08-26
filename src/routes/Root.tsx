@@ -3,16 +3,14 @@ import { FormattedMessage } from "react-intl";
 import { Navigate, Outlet, useMatch, useNavigate } from "react-router-dom";
 import { useSetAtom, useStore } from "jotai";
 import { Sidebar } from "../components/Sidebar";
-import { DailyQuizPanel } from "../components/DailyQuizPanel";
-import { useAuth } from "../queries/useAuth";
-import { useChatList } from "../queries/useChatList";
-import { useAuthMutations } from "../mutations/useAuthMutations";
-import { useChatMutations } from "../mutations/useChatMutations";
+import { DailyQuizFab, DailyQuizPanel } from "../components/DailyQuizPanel";
+import { useAuth, useAuthMutations } from "../hooks/auth";
+import { useChatList, useChatMutations } from "../hooks/chats";
 import { chatFamily, chatIdsAtom } from "../store/chats";
 import { courseJobFamily } from "../store/courseJobs";
 import { cancelCourseJob } from "../streams/runCourseGeneration";
 import { useSaveEffect } from "../store/saveEffect";
-import "../App.css";
+import "./Root.css";
 
 export function Root() {
   const auth = useAuth();
@@ -115,6 +113,7 @@ export function Root() {
         </section>
       </main>
       <DailyQuizPanel enabled={auth.data?.authenticated === true} />
+      <DailyQuizFab enabled={auth.data?.authenticated === true} />
     </div>
   );
 }

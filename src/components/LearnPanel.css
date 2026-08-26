@@ -1,0 +1,598 @@
+/* Background panel — floating, bottom right */
+
+.bg-panel,
+.bg-pill {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 10;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow:
+    0 1px 2px rgb(0 0 0 / 6%),
+    0 12px 32px rgb(0 0 0 / 14%);
+}
+
+.bg-panel {
+  width: 24rem;
+  height: min(36rem, calc(100vh - 5rem));
+  border-radius: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Collapsed state */
+
+/* The label matches the open-panel eyebrow — same treatment across states,
+   so the pill reads as the same object collapsed as it does expanded. */
+.bg-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.85rem;
+  border-radius: 999px;
+  color: var(--accent);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.bg-pill:hover {
+  border-color: var(--accent);
+}
+
+.bg-pill .bg-count {
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+  letter-spacing: 0;
+}
+
+/* Header */
+
+.bg-hd {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.85rem 0.9rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.bg-hd-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.bg-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.3rem;
+}
+
+.bg-dot {
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent);
+}
+
+.bg-topic {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.bg-reason {
+  margin: 0.2rem 0 0;
+  line-height: 1.4;
+}
+
+.bg-collapse {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  padding: 0;
+  border-radius: 0.4rem;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--muted);
+}
+
+.bg-collapse:hover {
+  border-color: var(--border);
+  color: var(--text);
+}
+
+/* Body */
+
+.bg-body {
+  flex: 1;
+  min-height: 0;
+  padding: 0.5rem;
+  overflow-y: auto;
+}
+
+.bg-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0.85rem 0.5rem;
+}
+
+.bg-spinner {
+  width: 0.85rem;
+  height: 0.85rem;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 2px solid color-mix(in srgb, var(--accent) 25%, transparent);
+  border-top-color: var(--accent);
+  animation: bg-spin 0.9s linear infinite;
+}
+
+@keyframes bg-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bg-spinner {
+    animation: none;
+  }
+}
+
+/* Reading list */
+
+.bg-links,
+.bg-earlier {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.bg-links a {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.15rem 0.5rem;
+  padding: 0.6rem 0.55rem;
+  border-radius: 0.6rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.bg-links a:hover {
+  background: var(--user-bg);
+}
+
+.bg-link-title {
+  font-size: 0.9rem;
+  line-height: 1.35;
+  color: var(--accent);
+  /* Cap at two lines — a wildly long article title used to run down the panel. */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.bg-links a:hover .bg-link-title {
+  text-decoration: underline;
+}
+
+.bg-link-site {
+  white-space: nowrap;
+  align-self: start;
+  padding-top: 0.1rem;
+}
+
+.bg-link-why {
+  grid-column: 1 / -1;
+  line-height: 1.45;
+}
+
+/* Earlier topics */
+
+.bg-section-hd {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+  padding: 0.5rem 0.55rem 0.3rem;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.bg-section-hd .rule {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.bg-earlier button {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.4rem 0.55rem;
+  border-radius: 0.5rem;
+  background: transparent;
+  border: 0;
+  color: var(--text);
+  font-size: 0.85rem;
+  text-align: left;
+}
+
+.bg-earlier button:hover {
+  background: var(--user-bg);
+}
+
+.bg-earlier button .muted {
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+/* Footer */
+
+.bg-ft {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 0.9rem;
+  border-top: 1px solid var(--border);
+}
+
+.bg-ft .muted {
+  flex: 1;
+  line-height: 1.35;
+}
+
+.bg-linkish {
+  padding: 0;
+  background: transparent;
+  border: 0;
+  color: var(--accent);
+  font-size: 0.8rem;
+}
+
+.bg-linkish:hover {
+  text-decoration: underline;
+}
+
+
+@media (max-width: 32rem) {
+  .bg-panel {
+    width: auto;
+    left: 1rem;
+    right: 1rem;
+  }
+}
+/* Tabs */
+
+.bg-tabs {
+  display: flex;
+  gap: 0.15rem;
+  padding: 0.35rem 0.5rem;
+  background: var(--user-bg);
+  border-bottom: 1px solid var(--border);
+}
+
+.bg-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.5rem;
+  font-size: 0.82rem;
+  border-radius: 0.4rem;
+  background: transparent;
+  color: var(--muted);
+  border: 0;
+}
+
+.bg-tab:hover {
+  color: var(--text);
+}
+
+.bg-tab.active {
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 8%);
+}
+
+.bg-tab .bg-count {
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+  padding: 0 0.35rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--muted) 20%, transparent);
+  color: inherit;
+}
+
+/* Video tiles */
+
+.bg-videos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.bg-video {
+  border-radius: 0.6rem;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.bg-video-frame {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: var(--user-bg);
+}
+
+.bg-video-frame iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+.bg-video-thumb {
+  position: absolute;
+  inset: 0;
+  padding: 0;
+  border: 0;
+  background: var(--user-bg) center / cover no-repeat;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.bg-video-thumb:hover .bg-play {
+  transform: scale(1.05);
+}
+
+.bg-play {
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 92%);
+  color: #16171a;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 4px 16px rgb(0 0 0 / 35%);
+  transition: transform 0.15s ease;
+}
+
+.bg-play svg {
+  margin-left: 0.15rem;
+}
+
+.bg-video-meta {
+  padding: 0.55rem 0.65rem 0.65rem;
+}
+
+.bg-video-title {
+  color: var(--text);
+  text-decoration: none;
+  font-size: 0.88rem;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.bg-video-title:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.bg-video-sub {
+  margin-top: 0.25rem;
+  line-height: 1.4;
+}
+
+.bg-video-sub .sep {
+  margin: 0 0.35rem;
+  opacity: 0.5;
+}
+
+/* Practice tab — mixed videos, articles, sandboxes */
+
+.bg-practice {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.bg-practice-item a {
+  display: block;
+  padding: 0.55rem 0.6rem;
+  border-radius: 0.55rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.bg-practice-item a:hover {
+  background: var(--user-bg);
+}
+
+.bg-practice-item a:hover .bg-practice-title {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.bg-practice-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.bg-practice-title {
+  font-size: 0.9rem;
+  line-height: 1.35;
+  color: var(--text);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.bg-practice-sub {
+  display: block;
+  margin-top: 0.2rem;
+  line-height: 1.4;
+}
+
+.bg-practice-sub .sep {
+  margin: 0 0.35rem;
+  opacity: 0.5;
+}
+
+.bg-kind {
+  flex-shrink: 0;
+  padding: 0.05rem 0.4rem;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-radius: 0.3rem;
+  color: var(--muted);
+  background: color-mix(in srgb, var(--muted) 15%, transparent);
+}
+
+.bg-kind-video {
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 15%, transparent);
+}
+
+.bg-kind-sandbox {
+  color: #6ea86e;
+  background: color-mix(in srgb, #6ea86e 20%, transparent);
+}
+
+/* Courses are a longer commitment than a tutorial — signal that visually. */
+.bg-kind-course {
+  color: #7a6ab0;
+  background: color-mix(in srgb, #7a6ab0 20%, transparent);
+}
+
+@media (prefers-color-scheme: dark) {
+  .bg-kind-sandbox {
+    color: #a4d4a4;
+  }
+  .bg-kind-course {
+    color: #b6a8e0;
+  }
+}
+
+/* Practice tab — sections */
+
+.bg-practice-wrap {
+  display: grid;
+  gap: 0.75rem;
+/* Animated Claude spark — sits in place of the dot on the collapsed pill
+   whenever a gather is still in flight. Rotates continuously and breathes. */
+
+.bg-spark {
+  display: inline-flex;
+  width: 0.95rem;
+  height: 0.95rem;
+  color: var(--accent);
+  animation: bg-spark-spin 3.2s linear infinite;
+  transform-origin: center;
+}
+
+.bg-spark svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--accent) 45%, transparent));
+  animation: bg-spark-pulse 1.4s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes bg-spark-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes bg-spark-pulse {
+  0%,
+  100% {
+    opacity: 0.85;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bg-spark,
+  .bg-spark svg {
+    animation: none;
+  }
+}
+/* Generate-course trigger — sits between the header and the tabs */
+
+.bg-generate-course {
+  align-self: flex-start;
+  margin: 0.5rem 0.9rem 0.5rem;
+  padding: 0.25rem 0.4rem;
+  border-radius: 0.35rem;
+  background: transparent;
+  border: 0;
+  color: var(--accent);
+  font-size: 0.78rem;
+  text-align: left;
+}
+
+.bg-generate-course:hover {
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+/* Expanded panel — click the arrow icon to grow into a large reading pane */
+
+.bg-panel-expanded {
+  width: min(44rem, calc(100vw - 2.5rem));
+  height: min(46rem, calc(100vh - 3rem));
+  right: 1.25rem;
+  bottom: 1.25rem;
+}
+
+/* At the larger size the video grid can go two-up for less scrolling. */
+@media (min-width: 68rem) {
+  .bg-panel-expanded .bg-videos {
+    grid-template-columns: 1fr 1fr;
+  }
+}

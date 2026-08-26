@@ -1,0 +1,124 @@
+/* Interactive quiz card */
+
+.bg-quiz {
+  padding: 0.85rem 0.7rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 0.7rem;
+  background: var(--surface);
+  display: grid;
+  gap: 0.6rem;
+}
+
+.bg-quiz-progress {
+  letter-spacing: 0.03em;
+}
+
+.bg-quiz-prompt {
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.bg-quiz-options {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.bg-quiz-option button {
+  display: flex;
+  align-items: baseline;
+  gap: 0.55rem;
+  width: 100%;
+  padding: 0.55rem 0.65rem;
+  border-radius: 0.55rem;
+  border: 1px solid var(--border);
+  background: var(--user-bg);
+  color: var(--text);
+  text-align: left;
+  font-size: 0.88rem;
+  line-height: 1.35;
+  cursor: pointer;
+  transition:
+    background 0.12s ease,
+    border-color 0.12s ease;
+}
+
+.bg-quiz-option.idle button:hover {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, var(--user-bg));
+}
+
+.bg-quiz-marker {
+  flex-shrink: 0;
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--muted) 20%, transparent);
+  color: var(--text);
+  display: grid;
+  place-items: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.bg-quiz-option.correct button {
+  border-color: #59a37a;
+  background: color-mix(in srgb, #59a37a 15%, var(--user-bg));
+}
+
+.bg-quiz-option.correct .bg-quiz-marker {
+  background: #59a37a;
+  color: white;
+}
+
+.bg-quiz-option.wrong button {
+  border-color: var(--error);
+  background: color-mix(in srgb, var(--error) 12%, var(--user-bg));
+}
+
+.bg-quiz-option.wrong .bg-quiz-marker {
+  background: var(--error);
+  color: white;
+}
+
+.bg-quiz-option.muted button {
+  opacity: 0.55;
+}
+
+.bg-quiz-option button:disabled {
+  cursor: default;
+}
+
+.bg-quiz-why {
+  margin: 0.35rem 0 0.15rem 2rem;
+  line-height: 1.4;
+}
+
+.bg-quiz-next {
+  justify-self: end;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.85rem;
+}
+
+.bg-quiz-done {
+  display: grid;
+  gap: 0.5rem;
+  padding: 1rem;
+  text-align: center;
+}
+
+.bg-quiz-summary {
+  font-size: 0.95rem;
+}
+
+/* Row of buttons (Retry + optional Done) on the done screen — mirrors the
+   Next button's bottom-right placement while streaming. */
+.bg-quiz-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}

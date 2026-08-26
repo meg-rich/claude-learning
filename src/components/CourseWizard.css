@@ -1,0 +1,295 @@
+/* Course wizard — replaces the panel body while active */
+
+.course-wizard {
+  padding: 0.5rem 0.5rem 0.75rem;
+  display: grid;
+  gap: 0.7rem;
+}
+
+.course-wizard-lede {
+  margin: 0 0.15rem;
+  line-height: 1.4;
+}
+
+.course-wizard-questions {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.course-wizard-prompt {
+  font-size: 0.88rem;
+  line-height: 1.35;
+  margin-bottom: 0.4rem;
+}
+
+.course-wizard-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.course-wizard-option {
+  padding: 0.35rem 0.6rem;
+  font-size: 0.8rem;
+  border-radius: 0.4rem;
+  background: var(--user-bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.course-wizard-option:hover {
+  border-color: var(--accent);
+}
+
+.course-wizard-option.selected {
+  background: color-mix(in srgb, var(--accent) 15%, transparent);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.course-wizard-input {
+  width: 100%;
+}
+
+.course-wizard-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.4rem;
+}
+
+/* Course tab — full-width intake wizard hosted inside the chat area */
+
+.course-tab {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2.5rem 2rem 2.5rem;
+}
+
+.course-tab-header {
+  max-width: 52rem;
+  width: 100%;
+  margin-bottom: 1.75rem;
+  text-align: center;
+}
+
+.course-tab-eyebrow {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+
+.course-tab-title {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 500;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+/* Slightly bigger form controls when the wizard has the whole chat area. */
+.course-tab .course-wizard {
+  max-width: 52rem;
+  width: 100%;
+  padding: 0;
+}
+
+.course-tab .course-wizard-prompt {
+  font-size: 1rem;
+}
+
+.course-tab .course-wizard-option {
+  padding: 0.5rem 0.85rem;
+  font-size: 0.9rem;
+}
+
+.course-tab .course-wizard-input {
+  font-size: 0.95rem;
+  padding: 0.7rem 0.85rem;
+}
+
+.course-tab .course-wizard-actions {
+  margin-top: 0.75rem;
+}
+
+.course-tab .course-wizard-actions .bg-action {
+  padding: 0.55rem 1.1rem;
+  font-size: 0.9rem;
+}
+
+/* Indeterminate progress bar — shown while the course is generating. */
+
+.course-progress-label {
+  margin: 0 0 0.6rem;
+  text-align: center;
+}
+
+.course-progress {
+  position: relative;
+  width: 100%;
+  height: 0.35rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+.course-progress-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 35%;
+  border-radius: inherit;
+  background: var(--accent);
+  animation: course-progress-slide 1.4s ease-in-out infinite;
+  transition: width 0.35s ease;
+}
+
+/* Determinate mode — the sliding animation stops, width tracks real progress. */
+.course-progress.determinate .course-progress-bar {
+  left: 0;
+  animation: none;
+}
+
+@keyframes course-progress-slide {
+  0% {
+    left: -40%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .course-progress-bar {
+    animation: none;
+    left: 0;
+    width: 100%;
+    opacity: 0.6;
+  }
+}
+
+/* Live view of what the server is doing under the hood. */
+
+.course-generating {
+  gap: 1.1rem;
+}
+
+.course-plan {
+  list-style: none;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.course-plan-step {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--text);
+}
+
+.course-plan-step.done {
+  color: var(--muted);
+}
+
+.course-plan-hint {
+  padding-left: 1.9rem;
+  line-height: 1.4;
+}
+
+.course-plan-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.15rem;
+  height: 1.15rem;
+  flex-shrink: 0;
+  border-radius: 50%;
+}
+
+.course-plan-icon.done {
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+  color: var(--accent);
+}
+
+.course-plan-icon.spinning {
+  border: 2px solid color-mix(in srgb, var(--accent) 25%, transparent);
+  border-top-color: var(--accent);
+  animation: bg-spin 0.9s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .course-plan-icon.spinning {
+    animation: none;
+  }
+}
+
+.course-plan-count {
+  font-variant-numeric: tabular-nums;
+}
+
+.course-modules {
+  list-style: none;
+  margin: 0.25rem 0 0;
+  padding: 0.65rem 0.85rem;
+  display: grid;
+  gap: 0.4rem;
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  background: var(--user-bg);
+  font-size: 0.88rem;
+}
+
+.course-module {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  transition:
+    color 0.25s ease,
+    opacity 0.25s ease;
+}
+
+.course-module.pending {
+  color: var(--muted);
+}
+
+.course-module.done {
+  color: var(--text);
+}
+
+.course-module-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 0.85rem;
+  height: 0.85rem;
+  flex-shrink: 0;
+  border-radius: 50%;
+}
+
+.course-module-icon.pending {
+  border: 1.5px solid color-mix(in srgb, var(--muted) 45%, transparent);
+}
+
+.course-module-icon.done {
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+  color: var(--accent);
+}
+
+.course-module-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
