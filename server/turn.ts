@@ -87,66 +87,74 @@ export type TurnEvent =
 const OFFER_BACKGROUND: Anthropic.Tool = {
   name: "offer_background",
   description:
-    "Offer the user background reading on one concept — but be genuinely conservative. Most " +
-    "questions do not need this; a plain, correct reply is almost always enough.\n\n" +
+    "Offer the user background reading on one concept, so they can verify or act on your " +
+    "answer with the context they need. The panel opens while you are still writing and " +
+    "gives them something to actively engage with as your task completes — that engagement " +
+    "is what lets them evaluate your output rather than accept it blindly.\n\n" +
     "TIMING — critical. If you are going to call this tool, call it BEFORE writing your " +
     "answer, not after. The panel's whole value is that it fills in while the user reads; " +
     "a call made late in a long reply arrives after the reader has already moved on. Decide " +
     "from the user's message itself, not from what you have drafted so far — the signals " +
-    "below are visible in the question, so you can judge up front. When any path applies, " +
+    "below are visible in the question, so you can judge up front. When any case applies, " +
     "calling the tool is your FIRST action of the turn, before any prose.\n\n" +
-    "Call it when ANY of these paths applies:\n\n" +
-    "  A. FOUNDATIONAL CONFUSION — the topic is a concept, mental model, or body of knowledge " +
-    "     that takes more than a paragraph to understand well (not a one-sentence fact), AND " +
-    "     the user is clearly lost on it. Signals: they say they're new/confused, they ask what " +
-    "     something is or means, they misuse a term repeatedly, they describe normal behaviour " +
-    "     as a bug, or the question they're asking only makes sense if they're missing the " +
-    "     concept underneath.\n\n" +
-    "  B. HIGH-STAKES DECISION — the user is about to make a CONSEQUENTIAL COMMITMENT " +
-    '     ("signing the lease tomorrow", "putting in the offer", "starting the medication", ' +
-    '     "buying the shares", "waiving the inspection", "accepting the settlement") on advice ' +
-    "     from someone else, and they haven't shown they understand what they'd be agreeing to. " +
-    "     Even if you can answer their immediate question, they deserve to know the shape of " +
-    "     what they're committing to before they do it. High stakes = money, health, legal " +
-    "     exposure, contracts, or anything hard to reverse.\n\n" +
-    "  C. STUDY / REVIEW SESSION — the user names an exam, interview, class, or subject they're " +
-    '     preparing on ("nursing student here, exam next week on X", "prepping for the bar", ' +
-    '     "MCAT tomorrow", "job interview on data structures", "GRE verbal"). The panel is the ' +
-    "     study aid — videos, reading, and (when the topic is recall-heavy) a quiz — exactly " +
-    "     what a learner needs. This is NOT the coding-task exclusion below; a study/review " +
-    "     request is a positive trigger. Set include_quiz true for recall-heavy subjects.\n\n" +
-    "  D. NEW TO THE WHOLE DOMAIN — the user has flagged themselves as new to the entire area " +
-    '     the question sits in, not just to one term ("I don\'t know much about X," "first time ' +
-    '     dealing with X," "I\'m no expert on X," "never had to think about X before"). Even if ' +
-    "     you can answer the specific question inline, they lack the framework to evaluate the " +
-    "     next one — the primer is for the domain, not the question. This overrides the inline- " +
-    "     correction exclusion below: a tidy checklist in your reply is not a reason to skip the " +
-    "     panel here. When this path fires, set topic to the DOMAIN the user flagged as new to " +
-    '     ("car maintenance", "personal finance", "home buying"), not the narrow subject of the ' +
-    '     immediate question ("tire replacement", "index funds", "closing costs") — the primer ' +
-    "     is for the ground they're missing, not this one question.\n\n" +
-    "  E. VERDICT WITHOUT FRAMEWORK — the user is asking you to render a judgment " +
-    '     ("do I need this?", "is this normal?", "is this a good deal?", "is this fair?", ' +
-    '     "should I be worried?") in a domain where they have shown they cannot currently ' +
-    "     render one themselves. Answering the immediate question gives them today's verdict; " +
-    "     the primer gives them the criteria to render the next one on their own.\n\n" +
+    "Call it when ANY of these three cases applies — the user is CONFUSED or has a " +
+    "MISCONCEPTION about something crucial to the task you are about to perform for them:\n\n" +
+    "  1. NEW AREA AT WORK — the user is doing a work task that sits outside their usual " +
+    "     lane. Could be a different field, an adjacent specialty within their field, or a " +
+    "     role/responsibility that landed on them without prior experience. Examples: a " +
+    "     first-time manager writing a performance review; a marketing manager writing a JD " +
+    "     for an engineering role; a corporate lawyer drafting a housing lease; a founder " +
+    "     handling their own HR; a junior employee producing a work artifact for the first " +
+    "     time. They are competent adults — they just aren't in their usual territory. Do " +
+    "     NOT skip this case because the user 'seems competent'; competence in their broader " +
+    "     role is exactly the baseline that makes this specific unfamiliar sub-area worth a " +
+    '     primer. Set topic to the specific sub-area they are new to ("performance review ' +
+    '     calibration", "engineering role JDs"), not their whole profession.\n\n' +
+    "  2. MISTAKEN ON A FOUNDATIONAL CONCEPT — the user's request is built on a wrong " +
+    "     premise about the domain, and they have not asked to be corrected — they are " +
+    "     confidently proceeding while asking for the task. Deliver the task anyway and " +
+    "     correct the mistake inline, but ALSO fire the panel because the decision they " +
+    "     will make with your output rests on a premise that needs shoring up. Signals: " +
+    "     they present options as either/or when the options are not actually alternatives " +
+    '     ("sell to an agent as a book OR do magazine excerpts", "Roth or 401(k)"); they ' +
+    '     specify parameters that reveal a foundational gap ("I want a Roth — I make ' +
+    '     $250k"); they ask you to produce something the domain does not work that way; ' +
+    "     they use scare quotes around a term of art they are clearly not sure of; they mix " +
+    "     vocabulary from adjacent-but-distinct domains as if interchangeable. Set topic to " +
+    "     the specific concept they are mistaken about, not the whole domain.\n\n" +
+    "  3. PERSONAL TASK, USER CLEARLY LACKS DOMAIN KNOWLEDGE — the user has asked for a " +
+    "     personal (non-work) task in an area where they clearly do not have baseline " +
+    "     knowledge. Examples: first international trip, first garden, first-time car " +
+    "     buyer, new pet, inherited an estate, wedding planning, first home purchase, " +
+    "     unfamiliar medical situation. They want the task done; they aren't asking to " +
+    "     learn. But the background fills in alongside your work so they can evaluate " +
+    "     whether your output actually fits their situation and make judgment calls about " +
+    "     what to do with it. The signal is domain unfamiliarity revealed by the ask, not " +
+    '     necessarily by an announcement ("first time", "I don\'t know much about") — an ' +
+    "     ask that only makes sense from a beginner's position counts. Set topic to the " +
+    "     specific area of the task, not the whole life category.\n\n" +
     "Do NOT call it when:\n" +
-    "  · The correction is a single line you can just write inline (\"You want f/1.8, not f/16 — " +
-    "    smaller number, bigger opening.\") — no panel needed. Note: this exclusion covers " +
-    "    one-sentence corrections of a specific misconception, NOT multi-step checklists or " +
-    "    frameworks written inline; if your reply is itself teaching a way to evaluate something, " +
-    "    that is a signal the panel belongs (see paths D and E), not a reason to skip it.\n" +
-    "  · The user is asking a PRODUCTION task (\"write this code\", \"debug this\", \"edit " +
-    "    this draft\", \"draft this email\") and the answer is complete without background — " +
-    "    panel gets in the way. This does NOT apply to study/review sessions (path C), where " +
-    "    the panel is exactly the aid they want.\n" +
-    "  · The topic is trivia, one-off facts, opinion, or personal (schedules, preferences).\n" +
-    "  · The user is following along and using terms correctly.\n" +
+    "  · The correction is a single line you can just write inline (\"You want f/1.8, not " +
+    "    f/16 — smaller number, bigger opening.\") — no panel needed. Note: this exclusion " +
+    "    covers one-sentence corrections of a specific misconception, NOT multi-step " +
+    "    checklists or frameworks written inline; if your reply is itself teaching a way to " +
+    "    evaluate something, that is a signal the panel belongs, not a reason to skip it.\n" +
+    "  · The user is a senior professional executing standard work in their own field with " +
+    "    no foundational mistake — they know their job, and the panel would be noise.\n" +
+    "  · The user is asking for a quick rewrite, summary, translation, lookup, or " +
+    "    conversational task where there is no downstream decision to support.\n" +
+    "  · The user is explicitly studying or reviewing for an exam or interview — this app " +
+    "    is designed for people doing tasks, not people in study mode; that is a different " +
+    "    use case.\n" +
+    "  · The topic is trivia, one-off facts, opinion, or personal preferences (schedules, " +
+    "    what movie to watch, etc.).\n" +
     "  · You already offered background on this or a very close topic this session.\n\n" +
-    "Rule of thumb: if you find yourself thinking \"they'd probably benefit from a proper primer " +
-    "on X\" — call it. If \"one sentence in my reply handles this\" — don't. At most one call " +
-    "per reply. Calling it does not change your reply: answer the actual question as normal, " +
-    "including correcting any mistake inline, and do not mention the panel unless the user does.",
+    "Rule of thumb: if the user will have to evaluate, decide about, or act on your answer " +
+    "AND one of the three cases above applies — fire it. If the task ends when you deliver " +
+    "the output (a rewrite, a summary, a quick answer), or the user clearly knows their " +
+    "territory — don't. At most one call per reply. Calling it does not change your reply: " +
+    "answer the actual question as normal, including correcting any mistake inline, and do " +
+    "not mention the panel unless the user does.",
   strict: true,
   input_schema: {
     type: "object",
